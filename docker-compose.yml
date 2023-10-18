@@ -1,0 +1,24 @@
+version: "3"
+services:
+  judge-server:
+    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/judge_server
+    container_name: judge-server
+    restart: always
+    cap_drop:
+      - SETPCAP
+      - MKNOD
+      - NET_BIND_SERVICE
+      - SYS_CHROOT
+      - SETFCAP
+      - FSETID
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./data/judge_server/log:/log
+      - ./data/judge_server/run:/judger
+      - ./OnlineJudge-master/data/test_case:/test_case:ro
+    environment:
+      - SERVICE_URL=http://172.19.0.2:8080
+      - BACKEND_URL=http://172.17.0.1:8000/api/judge_server_heartbeat/
+      - TOKEN=judge_server_token
+
